@@ -1,0 +1,36 @@
+syntax = "proto3";
+package com.github.publiclibs.awesome.protector.network.proto;
+
+option optimize_for = SPEED;
+
+
+message UserInfo{
+	optional string aaa=1;
+}
+
+message TextChannel {
+	optional uint32 channelId = 1;
+	map<uint32,UserInfo> admins = 2;
+	optional bytes 	encodedMSG = 3;
+}
+
+
+message TextMessage{
+	optional uint32 channelId = 1;
+	optional uint32 author = 2;
+	optional bytes 	encodedMSG = 3;
+}
+
+message AudioChannel {
+	optional uint32 channelId = 1;
+	optional bytes 	streamData = 2;
+	optional uint32 bitrateMax = 3;
+	optional uint32 bitrateCurrent = 4;
+}
+
+message VideoChannel {
+	optional uint32 channelId = 1;
+	optional bytes 	streamData = 2;	
+	optional uint32 fpsMax = 3;
+	optional uint32 fpsCurrent = 4;
+}
