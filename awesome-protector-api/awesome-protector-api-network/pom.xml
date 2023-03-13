@@ -13,10 +13,7 @@
 			<artifactId>awesome-protector-data</artifactId>
 			<version>main-SNAPSHOT</version>
 		</dependency>
-		<dependency>
-			<groupId>io.netty</groupId>
-			<artifactId>netty-all</artifactId>
-		</dependency>
+		
 	</dependencies>
 	<modules>
 		<module>awesome-protector-api-network-proto</module>

@@ -17,5 +17,6 @@
 			<artifactId>awesome-protector-api-cryptography</artifactId>
 			<version>main-SNAPSHOT</version>
 		</dependency>
+		
 	</dependencies>
 </project>

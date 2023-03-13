@@ -135,9 +135,12 @@ public class ProtectorStore {
 
 	public final KeyStore store;
 
+	private final String storedPasswd;
+
 	public ProtectorStore(final Path trustStorePathIn, final String password) throws KeyStoreException,
 			NoSuchAlgorithmException, CertificateException, IOException, OperatorCreationException {
 		this.trustStorePath = trustStorePathIn;
+		storedPasswd = password;
 		store = KeyStore.getInstance(BKS, provider);
 		if (Files.exists(trustStorePath)) {
 			load(password.toCharArray());
@@ -236,6 +239,13 @@ public class ProtectorStore {
 	public PrivateKey getPrivateKey(final String keyAlias, final String password)
 			throws UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException {
 		return getPrivateKey(keyAlias, password.toCharArray());
+	}
+
+	/**
+	 * @return the storedPasswd
+	 */
+	public String getStoredPasswd() {
+		return storedPasswd;
 	}
 
 	private void initEmpty() throws NoSuchAlgorithmException, CertificateException, IOException {

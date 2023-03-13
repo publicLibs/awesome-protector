@@ -3,10 +3,17 @@
  */
 package com.github.publiclibs.awesome.protector.api.network.server;
 
+import java.io.IOException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 
 import javax.net.ssl.SSLException;
 
+import org.bouncycastle.operator.OperatorCreationException;
+
+import com.github.publiclibs.awesome.protector.api.cryptography.store.ProtectorStore;
 import com.github.publiclibs.awesome.protector.api.network.AbstractProtectorNetwork;
 import com.github.publiclibs.awesome.protector.api.network.tlsdemo.server.SecureChatServerInitializer;
 
@@ -24,6 +31,13 @@ import io.netty.handler.ssl.util.SelfSignedCertificate;
  */
 public class DemoServer {
 	public static class SRV extends AbstractProtectorNetwork<ServerBootstrap> {
+		/**
+		 * @param protectorStoreIn
+		 */
+		public SRV(final ProtectorStore protectorStoreIn) {
+			super(protectorStoreIn);
+		}
+
 		protected @Override void configureBootstrap(final ServerBootstrap bootstrapForCfg) {
 			bootstrapForCfg.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
 					.handler(new LoggingHandler(LogLevel.INFO))
@@ -36,9 +50,11 @@ public class DemoServer {
 
 		protected @Override SslContext createSSLContext() throws CertificateException, SSLException {
 			final SelfSignedCertificate ssc = new SelfSignedCertificate();
+
 			final SslContext sslCtx = SslContextBuilder
 
-					.forServer(ssc.certificate(), ssc.privateKey())
+					// .forServer(ssc.certificate(), ssc.privateKey())
+					.forServer(getKeyManager())
 
 					.protocols("TLSv1.3")
 					// .ciphers(new
@@ -53,8 +69,10 @@ public class DemoServer {
 
 	}
 
-	public static void main(final String[] args) throws CertificateException, SSLException, InterruptedException {
-		final SRV server = new SRV();
+	public static void main(final String[] args) throws CertificateException, InterruptedException, KeyStoreException,
+			NoSuchAlgorithmException, OperatorCreationException, IOException, UnrecoverableKeyException {
+		final ProtectorStore store = new ProtectorStore("server");
+		final SRV server = new SRV(store);
 		server.init();
 		server.getBootstrap().bind(3333).sync().channel().closeFuture().sync();
 	}
