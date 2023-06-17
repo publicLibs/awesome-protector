@@ -12,11 +12,11 @@ public class TestBothAny3 {
 			try (AudioPlayer player = new AudioPlayer()) {
 				final boolean[] stoped = new boolean[] { false };
 				new Thread(() -> {
-					float vol = -60F;
+					float vol = -30F;
 					try {
 						while (true) {
 							player.setVolume(vol);
-							vol += 1F;
+							vol += 0.5F;
 							System.err.println(vol);
 							Thread.sleep(30);
 						}
@@ -24,10 +24,9 @@ public class TestBothAny3 {
 						e.printStackTrace();
 						stoped[0] = true;
 					}
-
 				}).start();
 
-				final byte[] buffer = new byte[4096];
+				final byte[] buffer = new byte[AudioHeader.frameRate];
 				while (!stoped[0]) {
 					final int bytesRead = recorder.read(buffer, 0, buffer.length);
 					whiteNoise(buffer);
